@@ -6,9 +6,22 @@ const router = express.Router();
 
 // Register
 router.post('/register', async (req, res) => {
-  const { name, email, password, role } = req.body;
+  const { name, email, phone, password, role } = req.body;
   try {
-    const user = new User({ name, email, password, role });
+    if (!validator.isEmail(email)) {
+      return res.status(400).json({ message: 'Invalid email address' });
+    }
+    const phoneRegex = /^\d{10,15}$/; // Adjust regex if needed
+    if (!phoneRegex.test(phone)) {
+      return res.status(400).json({ message: 'Invalid phone number' });
+    }
+
+    // Password length validation
+    if (!password || password.length < 6) {
+      return res.status(400).json({ message: 'Password must be at least 6 characters long' });
+    }
+
+    const user = new User({ name, email, phone, password, role });
     await user.save();
     res.status(201).json({ message: 'User registered successfully' });
   } catch (err) {
