@@ -2,6 +2,7 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const User = require('../models/User');
+const validator = require('validator');
 const router = express.Router();
 
 // Register
@@ -11,7 +12,7 @@ router.post('/register', async (req, res) => {
     if (!validator.isEmail(email)) {
       return res.status(400).json({ message: 'Invalid email address' });
     }
-    const phoneRegex = /^\d{10,15}$/; // Adjust regex if needed
+    const phoneRegex =  /^(\+234|0)(70[0-9]|80[0-9]|81[0-9]|90[0-9]|91[0-9])[0-9]{6}$/; // Adjust regex if needed
     if (!phoneRegex.test(phone)) {
       return res.status(400).json({ message: 'Invalid phone number' });
     }
