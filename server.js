@@ -9,9 +9,12 @@ connectDB();
 const app = express();
 
 
-app.use(cors());
+app.use(cors(
+  origin: 'https://cityhome.netlify.app/#',
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+));
 app.use(express.json());
-
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/properties', require('./routes/properties'));
 
