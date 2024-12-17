@@ -12,7 +12,7 @@ router.post('/register', async (req, res) => {
     if (!validator.isEmail(email)) {
       return res.status(400).json({ message: 'Invalid email address' });
     }
-    const phoneRegex =  /^(\+234|0)(70[0-9]|80[0-9]|81[0-9]|90[0-9]|91[0-9])[0-9]{6}$/; // Adjust regex if needed
+    const phoneRegex =  /^(\+234|234|0)(7|8|9)[0-9]{9}$/; // Adjust regex if needed
     if (!phoneRegex.test(phone)) {
       return res.status(400).json({ message: 'Invalid phone number' });
     }
