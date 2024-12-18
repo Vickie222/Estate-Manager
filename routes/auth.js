@@ -7,7 +7,7 @@ const router = express.Router();
 
 // Register
 router.post('/register', async (req, res) => {
-  const { name, email, phone, password, role } = req.body;
+  const { name, email, phone, address, password, role } = req.body;
   try {
     if (!validator.isEmail(email)) {
       return res.status(400).json({ message: 'Invalid email address' });
@@ -22,7 +22,7 @@ router.post('/register', async (req, res) => {
       return res.status(400).json({ message: 'Password must be at least 6 characters long' });
     }
 
-    const user = new User({ name, email, phone, password, role });
+    const user = new User({ name, email, phone, address, password, role });
     await user.save();
     res.status(201).json({ message: 'User registered successfully' });
   } catch (err) {
