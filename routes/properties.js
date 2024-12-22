@@ -61,5 +61,37 @@ catch (err){
   res.status(500).json({ message: 'An error occurred.'});
 }
 });
+const checkOwnership = async (req, res, next) => {
+    const propertyId = req.params.propertyId;
+    const userId = req.user.id; 
 
+    try {
+        const property = await Property.findById(propertyId);
+
+        if (!property) {
+            return res.status(404).json({ message: 'Property not found' });
+        }
+
+        if (property.uploadedBy.toString() !== userId) {
+            return res.status(403).json({ message: 'You are not authorized to delete this property' });
+        }
+
+        req.property = property; // Pass the property to the next middleware
+        next();
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
+// DELETE property route
+router.delete('/:propertyId', auth('Agent'), checkOwnership, async (req, res) => {
+    try {
+        await req.property.deleteOne(); // Delete the property
+        res.status(200).json({ message: 'Property deleted successfully' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
 module.exports = router;
